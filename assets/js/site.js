@@ -395,7 +395,7 @@
     const toggle = $('[data-demo-toggle]', box);
     const caption = $('[data-demo-caption]', box);
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const captions = ['Sarah propose une idée.', 'Claire échange avec Sarah.', 'L’idée de Sarah est retenue.', 'Claire valide et publie.', 'La contribution de Sarah est reconnue.'];
+    const captions = ['Karim propose une idée.', 'Le responsable échange avec Karim.', 'L’idée est retenue avec un motif.', 'Le responsable valide et publie.', 'La contribution de Karim est reconnue.'];
     if (scenes.length !== captions.length || steps.length !== scenes.length || !toggle || !caption) return;
     $('[data-demo-controls]', box).hidden = false;
     let current = 0;

@@ -17,7 +17,7 @@
 <link rel="icon" href="/staffmeal-site-public/assets/brand/mark.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/staffmeal-site-public/assets/brand/mark.png">
 <link rel="preload" href="/staffmeal-site-public/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin="">
-<link rel="stylesheet" href="/staffmeal-site-public/assets/css/site.css?v=f8fa2adad0">
+<link rel="stylesheet" href="/staffmeal-site-public/assets/css/site.css?v=14c12fd023">
 <script>document.documentElement.classList.replace('no-js','js')</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://staff-meal.com/#organization","name":"Staff Meal","url":"https://staff-meal.com/","logo":"https://staff-meal.com/assets/brand/mark.png","slogan":"Le même service, à chaque service.","disambiguatingDescription":"Staff Meal est une application de gestion pour les équipes de restaurant, de boulangerie et d’hôtel, et non le repas pris par le personnel avant le service.","description":"Staff Meal est une application qui simplifie la gestion quotidienne des restaurants, des boulangeries et des hôtels : recettes, procédures, checklists et formations, pour toute l’équipe."},{"@type":"SoftwareApplication","@id":"https://staff-meal.com/#software","name":"Staff Meal","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"https://staff-meal.com/","inLanguage":"fr-FR","publisher":{"@id":"https://staff-meal.com/#organization"},"description":"Staff Meal est une application qui simplifie la gestion quotidienne des restaurants, des boulangeries et des hôtels : recettes, procédures, checklists et formations, pour toute l’équipe.","featureList":["To do : tâches et checklists par poste, avec preuve photo","Hygiène et HACCP : relevés, traçabilité et plan de nettoyage, dans les tâches du jour","Recettes et food cost","Formations","Onboarding","Manuel opératoire","Maintenance","Client mystère","Communication","Audit interne","Multi-site","Traduction automatique dans plus de 100 langues"]},{"@type":"WebSite","@id":"https://staff-meal.com/#website","url":"https://staff-meal.com/","name":"Staff Meal","inLanguage":"fr-FR","publisher":{"@id":"https://staff-meal.com/#organization"}},{"@type":"WebPage","@id":"https://staff-meal.com/securite-des-donnees.html#page","url":"https://staff-meal.com/securite-des-donnees.html","name":"Sécurité des données : hébergement, chiffrement | Staff Meal","description":"Où vos données sont stockées, qui y accède, comment elles sont protégées : chiffrement, hébergeur certifié ISO/IEC 27001, et les limites, dites clairement.","inLanguage":"fr-FR","isPartOf":{"@id":"https://staff-meal.com/#website"},"about":{"@id":"https://staff-meal.com/#software"},"breadcrumb":{"@id":"https://staff-meal.com/securite-des-donnees.html#breadcrumb"}},{"@type":"BreadcrumbList","@id":"https://staff-meal.com/securite-des-donnees.html#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://staff-meal.com/"},{"@type":"ListItem","position":2,"name":"À propos","item":"https://staff-meal.com/a-propos.html"},{"@type":"ListItem","position":3,"name":"La sécurité des données","item":"https://staff-meal.com/securite-des-donnees.html"}]},{"@type":"FAQPage","@id":"https://staff-meal.com/securite-des-donnees.html#faq","isPartOf":{"@id":"https://staff-meal.com/securite-des-donnees.html#page"},"mainEntity":[{"@type":"Question","name":"Où sont hébergées les données de Staff Meal ?","acceptedAnswer":{"@type":"Answer","text":"La base de données de l’application est hébergée par Google Cloud, dans une région que nous vous précisons pendant la démo ; les photos sont stockées chez Cloudflare ; les identifiants de connexion sont gérés par Google (Firebase Authentication), sur des serveurs situés aux États-Unis."}},{"@type":"Question","name":"Mes données sont-elles chiffrées ?","acceptedAnswer":{"@type":"Answer","text":"Oui : la base de données chiffre ce qu’elle stocke, et chaque échange entre l’application et les serveurs passe par une connexion chiffrée."}},{"@type":"Question","name":"Que se passe-t-il en cas de panne d’un serveur ?","acceptedAnswer":{"@type":"Answer","text":"La base de données est copiée en continu dans plusieurs zones distinctes : si l’une tombe en panne, vos données restent disponibles dans les autres."}},{"@type":"Question","name":"Mes équipiers doivent-ils donner leur numéro de téléphone ?","acceptedAnswer":{"@type":"Answer","text":"Non : les échanges de travail se font dans l’application, et personne n’a besoin de donner son numéro. Staff Meal s’ajoute à l’écran d’accueil du téléphone depuis le navigateur, sans passer par un store."}},{"@type":"Question","name":"Et les informations que je laisse sur ce site ?","acceptedAnswer":{"@type":"Answer","text":"Le formulaire de demande de démo est hébergé par Netlify, qui stocke les réponses aux États-Unis. Elles servent à vous rappeler, et ne sont jamais revendues ni cédées. Le détail est dans la politique de confidentialité."}}]}]}</script>
 <script>window.plausible = window.plausible || function () { (window.plausible.q = window.plausible.q || []).push(arguments) }</script>
@@ -128,15 +128,7 @@
         <h3>Quatre rôles, des accès choisis.</h3>
         <p>Propriétaire, directeur, manager, équipier&nbsp;: chaque personne a son rôle, et son rôle décide de ce qu’elle voit. Vous choisissez qui a quel rôle. Les données de chaque établissement restent séparées.</p>
       </div>
-      <div class="vis" role="img" aria-label="Écran de l’application&nbsp;: l’équipe du site Centre et le rôle de chacun, du gérant, propriétaire, à l’équipière de cuisine, avec ce que chaque rôle voit.">
-        <div class="ui">
-          <div class="ui-h"><div><p class="ui-s">Équipe · site Centre</p><p class="ui-t">Rôles et accès</p></div></div>
-          <div class="ms-line"><span class="ms-av">FR</span><div><b>François, gérant</b><small>Tous les établissements</small></div><span class="ms-chip">Propriétaire</span></div>
-          <div class="ms-line"><span class="ms-av b">CL</span><div><b>Claire, directrice des opérations</b><small>Ses sites&nbsp;: Centre et Gare</small></div><span class="ms-chip">Directeur</span></div>
-          <div class="ms-line"><span class="ms-av s">SA</span><div><b>Sarah, responsable de salle</b><small>Le site Centre</small></div><span class="ms-chip">Manager</span></div>
-          <div class="ms-line"><span class="ms-av s">IN</span><div><b>Inès, commis</b><small>Sa journée, en cuisine</small></div><span class="ms-chip">Équipier</span></div>
-        </div>
-      </div>
+
     </article>
 
     <div class="cards-2">
@@ -145,15 +137,7 @@
           <h3>Vos recettes et vos prix d’achat.</h3>
           <p>Une recette secrète ne s’ouvre qu’aux personnes que vous choisissez. Vos prix d’achat ne sont visibles que par ceux que vous autorisez, comme le chef qui suit son food cost. Le détail&nbsp;: <a href="/staffmeal-site-public/module-recettes-food-cost.html">vos recettes protégées, dans le module Recettes</a>.</p>
         </div>
-        <div class="vis" role="img" aria-label="Écran de l’application&nbsp;: la fiche technique du burger signature, une recette secrète ouverte à François, le gérant, à Claire, la directrice des opérations, et à Paul, le chef&nbsp;; son coût n’est visible que par la direction et le chef.">
-          <div class="ui">
-            <div class="ui-h"><div><p class="ui-s">Fiche technique · plat envoyé</p><p class="ui-t">Burger signature</p></div><span class="ms-chip">Recette secrète</span></div>
-            <p class="ui-s">Recette ouverte à</p>
-            <div class="ms-avs"><span class="ms-av">FR</span><span class="ms-av b">CL</span><span class="ms-av g">PA</span><small>François, Claire et Paul</small></div>
-            <div class="ms-sep"></div>
-            <div class="ms-row"><span>Prix d’achat et coût de l’assiette</span><b>Direction et chef</b></div>
-          </div>
-        </div>
+
       </article>
       <article class="card">
         <div class="card-txt">
@@ -166,7 +150,7 @@
         </div>
       </article>
     </div>
-    <p class="screens-note">Écrans de l’application, avec des données d’exemple.</p>
+    <p class="note-ecrans">Captures de l’application Staff Meal · données de démonstration.</p>
 
   </div>
 </section>
@@ -328,7 +312,7 @@
 </footer>
 
 </div>
-<script src="/staffmeal-site-public/assets/js/site.js?v=a34e56906e" defer=""></script>
+<script src="/staffmeal-site-public/assets/js/site.js?v=ad3e49d390" defer=""></script>
 
 
 </body></html>
