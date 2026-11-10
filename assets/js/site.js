@@ -297,6 +297,28 @@
     if (box) box.checked = true;
   };
 
+  // ---------------------------------------------------------------- demande de démo : préparation locale, envoi choisi dans la messagerie
+  $$('form[data-demo-email]').forEach((form) => {
+    const fields = $('[data-demo-fields]', form);
+    const status = $('[data-demo-mail-status]', form);
+    const recipient = form.getAttribute('data-recipient');
+    if (!fields || !recipient) return;
+    fields.hidden = false;
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (!form.reportValidity()) return;
+      const data = new FormData(form);
+      const name = String(data.get('nom') || '').trim();
+      const email = String(data.get('email') || '').trim();
+      const phone = String(data.get('telephone') || '').trim();
+      const body = `Bonjour Issam,\n\nJe souhaite découvrir Staff Meal pour mon établissement.\n\nNom : ${name}\nE-mail : ${email}${phone ? `\nTéléphone : ${phone}` : ''}\n\nMes priorités (à compléter si vous le souhaitez) :\n\nMerci.`;
+      const mail = `mailto:${recipient}?subject=${encodeURIComponent('Demande de démonstration Staff Meal')}&body=${encodeURIComponent(body)}`;
+      // Never report a sent message: the visitor sends it in their own mail application.
+      window.location.href = mail;
+      if (status) status.hidden = false;
+    });
+  });
+
   // ---------------------------------------------------------------- formulaires en trois étapes (Netlify Forms)
   $$('form[data-steps]').forEach((form) => {
     const steps = $$('[data-step]', form);
