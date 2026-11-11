@@ -198,7 +198,7 @@
   // Monthly pricing uses cumulative user tiers: 8 EUR through 20, 7 EUR through 50, then 6 EUR.
   // The slider and numeric input share the same user count; the same inputs feed the time estimate.
   $$('[data-pricing]').forEach((box) => {
-    const BASE = { annual: 199, monthly: 280 };
+    const BASE = { annual: 149, monthly: 249 };
     const TIERS = [[20, 8], [50, 7], [Infinity, 6]];
     const KNOTS = [[0, 1], [100, 20], [200, 50], [300, 500]];
     const sitesIn = $('[data-p-sites]', box);
