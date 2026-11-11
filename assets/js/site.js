@@ -76,6 +76,54 @@
     });
   });
 
+  // Homepage discovery: progressive panels, with links as the no-script fallback.
+  $$('[data-solution-tabs]').forEach((box) => {
+    const tabs = $$('[data-solution-tab]', box);
+    const panels = $$('[data-solution-panel]', box);
+    const tablist = $('[data-solution-tablist]', box);
+    if (!tablist || tabs.length !== panels.length || !tabs.length) return;
+    tablist.setAttribute('role', 'tablist');
+    const activate = (index, focus = false) => {
+      tabs.forEach((tab, i) => {
+        tab.setAttribute('aria-selected', String(i === index));
+        tab.tabIndex = i === index ? 0 : -1;
+        panels[i].hidden = i !== index;
+      });
+      if (focus) tabs[index].focus();
+    };
+    const fromHash = () => {
+      const target = document.getElementById(location.hash.slice(1));
+      const index = panels.findIndex((panel) => target && (panel === target || panel.contains(target)));
+      if (index >= 0) activate(index);
+      return index;
+    };
+    tabs.forEach((tab, i) => {
+      tab.setAttribute('role', 'tab');
+      tab.setAttribute('aria-controls', panels[i].id);
+      panels[i].setAttribute('role', 'tabpanel');
+      panels[i].tabIndex = 0;
+      tab.addEventListener('click', (event) => {
+        event.preventDefault();
+        activate(i);
+        history.replaceState(null, '', '#' + panels[i].id);
+      });
+      tab.addEventListener('keydown', (event) => {
+        let next;
+        if (event.key === 'ArrowRight') next = (i + 1) % tabs.length;
+        if (event.key === 'ArrowLeft') next = (i + tabs.length - 1) % tabs.length;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = tabs.length - 1;
+        if (next === undefined) return;
+        event.preventDefault();
+        activate(next, true);
+        history.replaceState(null, '', '#' + panels[next].id);
+      });
+    });
+    activate(0);
+    fromHash();
+    window.addEventListener('hashchange', fromHash);
+  });
+
   // ---------------------------------------------------------------- accordéons : une réponse ouverte à la fois
   $$('.faq').forEach((faq, k) => {
     const items = $$(':scope > details', faq);
