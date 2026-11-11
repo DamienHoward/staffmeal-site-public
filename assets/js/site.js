@@ -198,7 +198,7 @@
   // Monthly pricing uses cumulative user tiers: 8 EUR through 20, 7 EUR through 50, then 6 EUR.
   // The slider and numeric input share the same user count; the same inputs feed the time estimate.
   $$('[data-pricing]').forEach((box) => {
-    const BASE = 199;
+    const BASE = { annual: 199, monthly: 280 };
     const TIERS = [[20, 8], [50, 7], [Infinity, 6]];
     const KNOTS = [[0, 1], [100, 20], [200, 50], [300, 500]];
     const sitesIn = $('[data-p-sites]', box);
@@ -209,6 +209,7 @@
     const over = $('[data-p-over]', box);
     const live = $('[data-p-live]', box);
     const copies = $$('[data-p-total-copy]');
+    const billing = $$('[data-p-billing]', box);
     if (!sitesIn || !empIn || !range || !detail || !total) return;
     const NB = ' ';
     const euro = (n) => fr(n) + NB + '€';
@@ -231,10 +232,15 @@
       return KNOTS[KNOTS.length - 1][0];
     };
     const render = () => {
+      const monthly = billing.some((input) => input.checked && input.value === 'monthly');
+      const basePrice = monthly ? BASE.monthly : BASE.annual;
+      const plan = monthly ? 'formule mensuelle' : 'formule annuelle';
+      $$('[data-p-base]').forEach((el) => { el.textContent = fr(basePrice); });
+      $$('[data-p-plan]').forEach((el) => { el.textContent = plan; });
       const sites = Math.min(500, int(sitesIn.value, 1));
       const emp = Math.min(100000, int(empIn.value, 1));
       range.setAttribute('aria-valuetext', plural(emp, 'utilisateur'));
-      const lines = [[plural(sites, 'établissement') + ' × ' + BASE + NB + '€', sites * BASE]];
+      const lines = [[plural(sites, 'établissement') + ' × ' + basePrice + NB + '€', sites * basePrice]];
       let prev = 0;
       let left = emp;
       for (const [cap, price] of TIERS) {
@@ -252,11 +258,12 @@
       total.parentElement.classList.remove('is-quote');
       copies.forEach((el) => { el.textContent = fr(sum); });
       detail.innerHTML = lines.map(([label, amount]) => '<li><span>' + label + '</span><b class="num">' + euro(amount) + '</b></li>').join('');
-      if (live) live.textContent = euro(sum) + ' HT par mois pour ' + plural(sites, 'établissement') + ' et ' + plural(emp, 'utilisateur') + '.';
+      if (live) live.textContent = euro(sum) + ' HT par mois pour ' + plural(sites, 'établissement') + ' et ' + plural(emp, 'utilisateur') + ', ' + plan + '.';
     };
     range.addEventListener('input', () => { empIn.value = String(toEmp(Number(range.value))); render(); });
     empIn.addEventListener('input', () => { range.value = String(toPos(Math.min(int(empIn.value, 1), 500))); render(); });
     sitesIn.addEventListener('input', render);
+    billing.forEach((input) => input.addEventListener('change', render));
     const step = (d) => { sitesIn.value = String(Math.min(500, Math.max(1, int(sitesIn.value, 1) + d))); sitesIn.dispatchEvent(new Event('input', { bubbles: true })); };
     const minus = $('[data-p-minus]', box);
     const plus = $('[data-p-plus]', box);
