@@ -93,7 +93,11 @@
   const NNBSP = ' ';
   const fr = (n) => Math.round(n).toLocaleString('fr-FR').replace(/\s/g, NNBSP);
   const roundTo = (n, k) => Math.round(n / k) * k;
-  const compute = (sites, emp, to) => {
+  const compute = (sites, emp, to, hourly = 17) => {
+    sites = Number.isFinite(sites) ? Math.max(1, Math.min(500, sites)) : 1;
+    emp = Number.isFinite(emp) ? Math.max(1, Math.min(100000, emp)) : 1;
+    to = Number.isFinite(to) ? Math.max(0, Math.min(100, to)) : 40;
+    hourly = Number.isFinite(hourly) && hourly >= 1 ? Math.min(500, hourly) : 17;
     // 50 h d'encadrement par arrivant (-30 %), 22 % de départs en moins (Gallup),
     // 10 min par salarié et par jour, 15 min par site et par jour, 2 h par mois et par site pour le coût des recettes, 17 € de l'heure
     const hires = emp * to / 100;
@@ -104,7 +108,7 @@
     const mgmt = sites * 0.25 * 6 * 52;
     const rec = sites * 2 * 12;
     const total = train + dep + team + mgmt + rec;
-    const eur = total * 17;
+    const eur = total * hourly;
     const eurTxt = 'environ ' + fr(roundTo(eur, eur >= 10000 ? 1000 : 100)) + ' €';
     return {
       sites: String(sites), emp: String(emp), toLabel: to + ' %',
@@ -122,7 +126,7 @@
     const input = (k) => $(`[data-calc-input="${k}"]`, form);
     let used = false;
     const update = () => {
-      const v = compute(Number(input('sites').value), Number(input('emp').value), Number(input('to').value));
+      const v = compute(Number(input('sites').value), Number(input('emp').value), Number(input('to').value), Number(input('hourly')?.value ?? 17));
       $$('[data-calc-out]', box).forEach((el) => { el.textContent = v[el.getAttribute('data-calc-out')]; });
       $$('[data-calc-valuetext]', box).forEach((el) => el.setAttribute('aria-valuetext', v[el.getAttribute('data-calc-valuetext')]));
     };
@@ -191,13 +195,12 @@
   });
 
   // ---------------------------------------------------------------- tarifs : le simulateur
-  // 199 € HT par établissement et par mois ; les salariés de tous les établissements se cumulent et se paient
-  // par tranches (8 € du 1er au 20e, 7 € jusqu'au 50e, 6 € jusqu'au 100e, 5 € au-delà). Le curseur donne
-  // la même largeur à chaque tranche ; le champ accepte n'importe quel effectif.
+  // Monthly pricing uses cumulative user tiers: 8 EUR through 20, 7 EUR through 50, then 6 EUR.
+  // The slider and numeric input share the same user count; the same inputs feed the time estimate.
   $$('[data-pricing]').forEach((box) => {
     const BASE = 199;
-    const TIERS = [[20, 8], [50, 7], [100, 6], [Infinity, 5]];
-    const KNOTS = [[0, 1], [100, 20], [200, 50], [300, 100], [400, 500]];
+    const TIERS = [[20, 8], [50, 7], [Infinity, 6]];
+    const KNOTS = [[0, 1], [100, 20], [200, 50], [300, 500]];
     const sitesIn = $('[data-p-sites]', box);
     const empIn = $('[data-p-emp]', box);
     const range = $('[data-p-range]', box);
@@ -228,33 +231,33 @@
       return KNOTS[KNOTS.length - 1][0];
     };
     const render = () => {
-      const sites = int(sitesIn.value, 1);
-      const emp = int(empIn.value, 1);
-      range.setAttribute('aria-valuetext', plural(emp, 'salarié'));
+      const sites = Math.min(500, int(sitesIn.value, 1));
+      const emp = Math.min(100000, int(empIn.value, 1));
+      range.setAttribute('aria-valuetext', plural(emp, 'utilisateur'));
       const lines = [[plural(sites, 'établissement') + ' × ' + BASE + NB + '€', sites * BASE]];
       let prev = 0;
       let left = emp;
       for (const [cap, price] of TIERS) {
         const n = Math.min(left, cap - prev);
         if (n <= 0) break;
-        lines.push([plural(n, 'salarié') + ' × ' + price + NB + '€', n * price]);
+        lines.push([plural(n, 'utilisateur') + ' × ' + price + NB + '€', n * price]);
         left -= n;
         prev = cap;
       }
       const sum = lines.reduce((a, l) => a + l[1], 0);
-      const quote = sites > 500;
-      if (over) over.hidden = !quote;
-      detail.hidden = quote;
-      total.textContent = quote ? 'Sur devis' : fr(sum);
-      total.parentElement.classList.toggle('is-quote', quote);
-      copies.forEach((el) => { el.textContent = quote ? '—' : fr(sum); });
+      if (over) over.hidden = true;
+      detail.hidden = false;
+      total.textContent = fr(sum);
+      $$('[data-p-annual]', box).forEach((el) => { el.textContent = fr(sum * 12); });
+      total.parentElement.classList.remove('is-quote');
+      copies.forEach((el) => { el.textContent = fr(sum); });
       detail.innerHTML = lines.map(([label, amount]) => '<li><span>' + label + '</span><b class="num">' + euro(amount) + '</b></li>').join('');
-      if (live) live.textContent = quote ? 'Au-delà de 500 établissements : offre Custom, sur devis.' : euro(sum) + ' HT par mois pour ' + plural(sites, 'établissement') + ' et ' + plural(emp, 'salarié') + '.';
+      if (live) live.textContent = euro(sum) + ' HT par mois pour ' + plural(sites, 'établissement') + ' et ' + plural(emp, 'utilisateur') + '.';
     };
     range.addEventListener('input', () => { empIn.value = String(toEmp(Number(range.value))); render(); });
     empIn.addEventListener('input', () => { range.value = String(toPos(Math.min(int(empIn.value, 1), 500))); render(); });
     sitesIn.addEventListener('input', render);
-    const step = (d) => { sitesIn.value = String(Math.max(1, int(sitesIn.value, 1) + d)); render(); };
+    const step = (d) => { sitesIn.value = String(Math.min(500, Math.max(1, int(sitesIn.value, 1) + d))); sitesIn.dispatchEvent(new Event('input', { bubbles: true })); };
     const minus = $('[data-p-minus]', box);
     const plus = $('[data-p-plus]', box);
     if (minus) minus.addEventListener('click', () => step(-1));
