@@ -405,7 +405,9 @@
     const toggle = $('[data-demo-toggle]', box);
     const caption = $('[data-demo-caption]', box);
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const captions = ['Karim propose une idée.', 'Le responsable échange avec Karim.', 'L’idée est retenue avec un motif.', 'Le responsable valide et publie.', 'La contribution de Karim est reconnue.'];
+    const author = box.dataset.demoAuthor || 'Karim';
+    const authorPhrase = /^[aeiouyhàâéèêëîïôöùûü]/i.test(author) ? 'd’' + author : 'de ' + author;
+    const captions = [`${author} propose une idée.`, `Le responsable échange avec ${author}.`, 'L’idée est retenue avec un motif.', 'Le responsable valide et publie.', `La contribution ${authorPhrase} est reconnue.`];
     if (scenes.length !== captions.length || steps.length !== scenes.length || !toggle || !caption) return;
     $('[data-demo-controls]', box).hidden = false;
     let current = 0;
